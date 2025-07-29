@@ -84,7 +84,8 @@ function patchUI() {
 	const container = document.createElement("div");
 	container.id = "overlay-container";
 	container.style.position = "absolute";
-	container.style.top = "10px";
+	container.style.top = "50%";
+    container.style.transform = "translateY(-50%)";
 	container.style.right = "10px";
 	container.style.zIndex = "9999";
 	container.style.display = "flex";
@@ -137,6 +138,7 @@ function patchUI() {
 		if (overlayImg) overlayImg.remove();
 		overlayImg = null;
 		alert("Overlay removido e configurações resetadas.");
+		location.reload();
 	});
 
 	const centerBtn = btn("Centralizar na tela", () => {
@@ -147,6 +149,37 @@ function patchUI() {
 			localStorage.setItem("overlayTop", overlayImg.style.top);
 		}
 	});
+
+	// Inputs manuais
+	const sizeContainer = document.createElement("div");
+	sizeContainer.style.display = "flex";
+	sizeContainer.style.gap = "4px";
+	sizeContainer.style.alignItems = "center";
+
+	const widthInput = document.createElement("input");
+	widthInput.type = "number";
+	widthInput.placeholder = "Largura";
+	widthInput.style.width = "80px";
+	widthInput.style.padding = "2px";
+	widthInput.style.borderRadius = "4px";
+
+	const heightInput = document.createElement("input");
+	heightInput.type = "number";
+	heightInput.placeholder = "Altura";
+	heightInput.style.width = "80px";
+	heightInput.style.padding = "2px";
+	heightInput.style.borderRadius = "4px";
+
+	const applySizeBtn = btn("Aplicar Tamanho", () => {
+		if (overlayImg) {
+			if (widthInput.value) overlayImg.style.width = widthInput.value + "px";
+			if (heightInput.value) overlayImg.style.height = heightInput.value + "px";
+			localStorage.setItem("overlayWidth", overlayImg.style.width);
+			localStorage.setItem("overlayHeight", overlayImg.style.height);
+		}
+	});
+
+	sizeContainer.append("Tamanho:", widthInput, heightInput, applySizeBtn);
 
 	const fileInput = document.createElement("input");
 	fileInput.type = "file";
@@ -163,8 +196,16 @@ function patchUI() {
 
 	const uploadBtn = btn("Escolher Imagem", () => fileInput.click());
 
-	container.append(fileInput, uploadBtn, blendBtn, darkenBtn, lockBtn, centerBtn, resetBtn);
+	container.append(fileInput, uploadBtn, blendBtn, darkenBtn, lockBtn, centerBtn, sizeContainer, resetBtn);
 	document.body.appendChild(container);
+
+	// Preenche os campos com os valores atuais
+	setTimeout(() => {
+		if (overlayImg) {
+			widthInput.value = parseInt(overlayImg.style.width) || 300;
+			heightInput.value = parseInt(overlayImg.style.height) || 300;
+		}
+	}, 500);
 }
 
 const observer = new MutationObserver(() => patchUI());
