@@ -6,6 +6,7 @@
 // @match        https://wplace.live/
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=wplace.live
 // @grant        none
+// @license      MIT
 // ==/UserScript==
 
 let overlayMode = localStorage.getItem("overlayMode") || "over";
