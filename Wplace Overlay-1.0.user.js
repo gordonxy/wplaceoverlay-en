@@ -123,7 +123,7 @@ function patchUI() {
         return b;
     };
 
-    const blendBtn = btn(`Modo: ${overlayMode}`, () => {
+    const blendBtn = btn(`Mode: ${overlayMode}`, () => {
         const modos = ["aus", "over", "difference", "out"];
         overlayMode = modos[(modos.indexOf(overlayMode) + 1) % modos.length];
         blendBtn.textContent = `Modo: ${overlayMode}`;
@@ -143,7 +143,7 @@ function patchUI() {
 
 
     const opacityLabel = document.createElement("label");
-    opacityLabel.textContent = `Opacidade: ${Math.round(parseFloat(opacityValue) * 100)}%`;
+    opacityLabel.textContent = `Opacity: ${Math.round(parseFloat(opacityValue) * 100)}%`;
     opacityLabel.style.textAlign = "center";
     opacityLabel.style.fontSize = "12px";
 
@@ -157,7 +157,7 @@ function patchUI() {
 
     opacitySlider.oninput = (e) => {
         opacityValue = e.target.value;
-        opacityLabel.textContent = `Opacidade: ${Math.round(parseFloat(opacityValue) * 100)}%`;
+        opacityLabel.textContent = `Opacity: ${Math.round(parseFloat(opacityValue) * 100)}%`;
         if (overlayImg) {
             overlayImg.style.opacity = opacityValue;
         }
@@ -166,9 +166,9 @@ function patchUI() {
 
     opacityContainer.append(opacityLabel, opacitySlider);
 
-    const lockBtn = btn(isLocked ? "🔒 Bloqueado" : "🔓 Editável", () => {
+    const lockBtn = btn(isLocked ? "🔒 Locked" : "🔓 Editierbar", () => {
         isLocked = !isLocked;
-        lockBtn.textContent = isLocked ? "🔒 Bloqueado" : "🔓 Editável";
+        lockBtn.textContent = isLocked ? "🔒 Locked" : "🔓 Editierbar";
         if (overlayImg) {
             overlayImg.style.pointerEvents = isLocked ? "none" : "auto";
             overlayImg.style.cursor = isLocked ? "default" : "move";
@@ -177,15 +177,15 @@ function patchUI() {
         localStorage.setItem("isLocked", isLocked);
     });
 
-    const resetBtn = btn("Redefinir Overlay", () => {
+    const resetBtn = btn("Reset overlay", () => {
         localStorage.clear();
         if (overlayImg) overlayImg.remove();
         overlayImg = null;
-        alert("Overlay removido e configurações resetadas.");
+        alert("Overlay will be removed and settings will be reset");
         location.reload();
     });
 
-    const centerBtn = btn("Centralizar na tela", () => {
+    const centerBtn = btn("Center on screen", () => {
         if (overlayImg) {
             overlayImg.style.left = `${(window.innerWidth - overlayImg.offsetWidth) / 2}px`;
             overlayImg.style.top = `${(window.innerHeight - overlayImg.offsetHeight) / 2}px`;
@@ -215,15 +215,15 @@ function patchUI() {
 
     const widthInput = document.createElement("input");
     widthInput.type = "number";
-    widthInput.placeholder = "Largura";
+    widthInput.placeholder = "Width";
     widthInput.style.width = "80px";
 
     const heightInput = document.createElement("input");
     heightInput.type = "number";
-    heightInput.placeholder = "Altura";
+    heightInput.placeholder = "Height";
     heightInput.style.width = "80px";
 
-    const applySizeBtn = btn("Aplicar", () => {
+    const applySizeBtn = btn("Apply", () => {
         if (overlayImg) {
             if (widthInput.value) overlayImg.style.width = widthInput.value + "px";
             if (heightInput.value) overlayImg.style.height = heightInput.value + "px";
@@ -241,11 +241,11 @@ function patchUI() {
 
     const ratioInput = document.createElement("input");
     ratioInput.type = "number";
-    ratioInput.placeholder = "Escala";
+    ratioInput.placeholder = "Scale";
     ratioInput.step = "0.1";
     ratioInput.style.width = "60px";
 
-    const ratioBtn = btn("Aplicar", () => {
+    const ratioBtn = btn("Apply", () => {
         if (overlayImg && ratioInput.value) {
             const ratio = parseFloat(ratioInput.value);
             overlayImg.style.width = (originalWidth * ratio) + "px";
@@ -255,9 +255,9 @@ function patchUI() {
             localStorage.setItem("overlayRatio", ratio);
         }
     });
-    ratioRow.append("Escala:", ratioInput, ratioBtn);
+    ratioRow.append("Scale:", ratioInput, ratioBtn);
 
-    const restoreSizeBtn = btn("Tamanho Original", () => {
+    const restoreSizeBtn = btn("Restore original size", () => {
         if (overlayImg) {
             overlayImg.style.width = originalWidth + "px";
             overlayImg.style.height = originalHeight + "px";
@@ -283,7 +283,7 @@ function patchUI() {
         }
     };
 
-    const uploadBtn = btn("Escolher Imagem", () => fileInput.click());
+    const uploadBtn = btn("Choose Image", () => fileInput.click());
 
     container.append(fileInput, uploadBtn, blendBtn, opacityContainer, lockBtn, centerBtn, sizeContainer, resetBtn);
     document.body.appendChild(container);
